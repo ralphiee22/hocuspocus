@@ -73,7 +73,7 @@ export class Connection {
     this.webSocket.on('message', this.handleMessage.bind(this))
     this.webSocket.on('pong', () => { this.pongReceived = true })
 
-    // this.sendCurrentAwareness()
+    this.sendCurrentAwareness()
   }
 
   /**

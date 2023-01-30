@@ -673,6 +673,12 @@ export class HocuspocusProvider extends EventEmitter {
   broadcastChannelSubscriber(data: ArrayBuffer) {
     this.mux(() => {
       const message = new IncomingMessage(data)
+
+      const documentName = message.readVarString()
+      console.log(`got msg for ${documentName}`)
+
+      message.writeVarString(documentName)
+
       new MessageReceiver(message)
         .setBroadcasted(true)
         .apply(this, false)
@@ -688,8 +694,8 @@ export class HocuspocusProvider extends EventEmitter {
     this.mux(() => {
       this.broadcast(SyncStepOneMessage, { document: this.document })
       this.broadcast(SyncStepTwoMessage, { document: this.document })
-      this.broadcast(QueryAwarenessMessage)
-      this.broadcast(AwarenessMessage, { awareness: this.awareness, clients: [this.document.clientID] })
+      this.broadcast(QueryAwarenessMessage, { document: this.document })
+      this.broadcast(AwarenessMessage, { awareness: this.awareness, clients: [this.document.clientID], document: this.document })
     })
   }
 
