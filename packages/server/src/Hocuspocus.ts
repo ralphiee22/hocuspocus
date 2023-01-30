@@ -21,14 +21,13 @@ import {
   HookName,
   AwarenessUpdate,
   HookPayload, beforeHandleMessagePayload,
+  onListenPayload,
 } from './types'
 import Document from './Document'
 import Connection from './Connection'
 import { OutgoingMessage } from './OutgoingMessage'
 import meta from '../package.json' assert {type: 'json'}
 import { Debugger } from './Debugger'
-import { MessageReceiver, onListenPayload } from '.'
-import document from './Document'
 
 export const defaultConfiguration = {
   name: null,
@@ -462,7 +461,7 @@ export class Hocuspocus {
               connection.isAuthenticated = true
 
               // Let the client know that authentication was successful.
-              const message = new OutgoingMessage(document.name).writeAuthenticated()
+              const message = new OutgoingMessage(hookPayload.documentName).writeAuthenticated()
 
               this.debugger.log({
                 direction: 'out',
@@ -478,7 +477,7 @@ export class Hocuspocus {
             })
             .catch((error = Forbidden) => {
               console.log('onAuthenticate failed, sending error')
-              const message = new OutgoingMessage(document.name).writePermissionDenied(error.reason ?? 'permission-denied')
+              const message = new OutgoingMessage(hookPayload.documentName).writePermissionDenied(error.reason ?? 'permission-denied')
 
               this.debugger.log({
                 direction: 'out',
