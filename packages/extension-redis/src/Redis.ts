@@ -211,7 +211,7 @@ export class Redis implements Extension {
         if (error || !lock) {
           // Expected behavior: Could not acquire lock, another instance locked it already.
           // No further `onStoreDocument` hooks will be executed.
-          reject()
+          reject({ error: 'Could not acquire lock' })
           return
         }
 
